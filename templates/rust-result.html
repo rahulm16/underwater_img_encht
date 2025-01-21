@@ -1,0 +1,32 @@
+{% extends 'layout.html' %} 
+{% block body %}
+
+<div class="container py-2 mx-auto my-50 h-10" style="margin: 9rem;">
+  <div class="row">
+    <div class="col-sm py-2 py-md-3">
+      <!-- Card for Title -->
+      <div class="card card-body" style="justify-content: center; background-color: blanchedalmond;">
+        <p class="text-center" style="color: black; font-size: 22px;">The enhanced images are:</p>
+      </div>
+
+      <!-- Display Input Image -->
+      <div class="card card-body mt-3" style="justify-content: center; background-color: blanchedalmond;">
+        <p class="text-center" style="color: black; font-size: 18px;">Input Image:</p>
+        <img src="{{ url_for('static', filename='images/input.png') }}" alt="Input Image" class="img-fluid mx-auto d-block" style="max-width: 100%; height: auto;">
+      </div>
+
+      <!-- Display Enhanced Image -->
+      <div class="card card-body mt-3" style="justify-content: center; background-color: blanchedalmond;">
+        <p class="text-center" style="color: black; font-size: 18px;">Enhanced Image:</p>
+        <img src="{{ url_for('static', filename='images/final_result.png') }}" alt="Enhanced Image" class="img-fluid mx-auto d-block" style="max-width: 100%; height: auto;">
+      </div>
+
+      <!-- Additional Precaution Content -->
+      <div class="card card-body mt-3" style="justify-content: center; background-color: blanchedalmond;">
+        <p class="text-center" style="color: black; font-size: 22px;">{{ precaution }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
