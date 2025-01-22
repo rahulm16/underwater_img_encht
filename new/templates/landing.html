@@ -154,6 +154,59 @@
                 padding: 0.8rem 2rem;
                 font-size: 1rem;
             }
+
+            .scroll-down-btn {
+                bottom: 1rem;
+                width: 40px;
+                height: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        .scroll-down-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .scroll-down-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .scroll-down-btn i {
+            color: white;
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .scroll-down-btn:hover i {
+            animation-play-state: paused;
         }
     </style>
 </head>
@@ -204,9 +257,38 @@
         </div>
     </section>
 
+    <button class="scroll-down-btn" id="scrollBtn">
+        <i class="fas fa-arrow-down"></i>
+    </button>
+
     <footer style="background: rgba(0, 0, 0, 0.5); padding: 1rem; text-align: center; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);">
         <p style="font-size: 1.1rem; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.9);">Created by Bhavana G and Bhavana Kabbur</p>
         <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">Underwater Image Processing Project &copy; 2024</p>
     </footer>
+
+    <script>
+        const scrollBtn = document.getElementById('scrollBtn');
+        const hero = document.querySelector('.hero');
+        const features = document.querySelector('.features');
+        
+        // Show button immediately when page loads
+        scrollBtn.style.display = 'flex';
+        
+        window.addEventListener('scroll', () => {
+            const featuresTop = features.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            // Hide button when features section starts becoming visible
+            if (featuresTop < windowHeight - 100) {
+                scrollBtn.style.display = 'none';
+            } else {
+                scrollBtn.style.display = 'flex';
+            }
+        });
+
+        scrollBtn.addEventListener('click', () => {
+            features.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
 </body>
 </html>
