@@ -51,10 +51,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Create necessary directories:
+4. Run the application:
 ```bash
-mkdir -p static/uploads
-mkdir -p weights
+python app.py
 ```
 
 ## Usage

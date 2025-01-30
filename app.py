@@ -8,6 +8,9 @@ import numpy as np
 from basicsr.utils.download_util import load_file_from_url
 from basicsr.archs.rrdbnet_arch import RRDBNet
 
+# Ensure upload directory exists
+os.makedirs('static/uploads', exist_ok=True)
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
