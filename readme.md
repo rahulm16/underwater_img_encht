@@ -51,16 +51,11 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Run the application:
-```bash
-python app.py
-```
-
 ## Usage
 
 1. Start the Flask application:
 ```bash
-python a.py
+python app.py
 ```
 
 2. Open a web browser and navigate to:
