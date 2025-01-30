@@ -4,7 +4,7 @@ from flask import Flask, render_template, request
 import numpy as np
 import pandas as pd
 from PIL import Image
-from model_predict import enhance_model
+from model_enhance import enhance_model
 
 app = Flask(__name__)
 
