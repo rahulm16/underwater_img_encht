@@ -44,7 +44,7 @@ pip install -r requirements.txt
 
 4. Create necessary directories:
 ```bash
-mkdir -p new/static/uploads
+mkdir -p static/uploads
 mkdir -p weights
 ```
 
@@ -69,7 +69,7 @@ http://localhost:5000
 ## Project Structure
 
 ```
-new/
+underwater_img_encht
 ├── static/
 │   ├── uploads/         # Stores uploaded and processed images
 │   └── underwater-bg.jpg
