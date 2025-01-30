@@ -29,11 +29,12 @@ def enhance_model(img_path):
     # Process and enhance the underwater image
     enhanced_image = enhance_image(model, img_path)
     
-    # Save original underwater image
-    input_img_array = img_to_array(load_img(img_path, target_size=IMG_SIZE)) / 255.0
-    input_image_save_path = "static/upload&result/input.png"
-    plt.imsave(input_image_save_path, input_img_array)
+    # Generate output path in the same directory as input
+    directory = os.path.dirname(img_path)
+    filename = os.path.basename(img_path)
+    output_path = os.path.join(directory, 'intermediate_' + filename)
     
     # Save enhanced underwater image
-    output_image_path = "static/upload&result/final_result.png"
-    plt.imsave(output_image_path, enhanced_image)
+    plt.imsave(output_path, enhanced_image)
+    
+    return output_path

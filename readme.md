@@ -1,11 +1,18 @@
 # Underwater Image Enhancement Web Application
 
-A Flask-based web application that enhances underwater images using the RealESRGAN deep learning model. This project provides a user-friendly interface for uploading underwater images and receiving enhanced versions with improved clarity, color, and detail.
+A Flask-based web application that enhances underwater images using a combination of specialized models. This project provides a user-friendly interface for uploading underwater images and offers two enhancement options:
+1. RealESRGAN enhancement for general super-resolution and detail enhancement
+2. Combined enhancement using both underwater-specific and RealESRGAN models for optimal results
 
 ## Features
 
 - 🌊 Specialized underwater image enhancement
-- 🤖 AI-powered processing using RealESRGAN
+- 🤖 Dual AI-powered processing:
+  - RealESRGAN model for super-resolution
+  - Custom underwater enhancement model for color correction
+- 🎨 Two processing options:
+  - Quick enhancement using RealESRGAN
+  - Advanced enhancement using combined models
 - 🖼️ Support for various image formats
 - ⚡ Real-time processing
 - 📱 Responsive web design
@@ -16,8 +23,10 @@ A Flask-based web application that enhances underwater images using the RealESRG
 
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Backend**: Python, Flask
-- **Deep Learning**: PyTorch, RealESRGAN
-- **Image Processing**: OpenCV
+- **Deep Learning**: 
+  - PyTorch (RealESRGAN)
+  - TensorFlow (Underwater Enhancement Model)
+- **Image Processing**: OpenCV, Pillow
 - **Styling**: Font Awesome icons
 
 ## Installation
@@ -63,6 +72,7 @@ http://localhost:5000
 3. Use the application:
    - Click the "Try it Now" button on the landing page
    - Upload an underwater image using drag-and-drop or file selection
+   - Choose an enhancement option (Quick or Advanced)
    - Click "Enhance Image" to process the image
    - Download the enhanced result
 
@@ -96,6 +106,11 @@ The application uses the RealESRGAN model for image enhancement:
 - Features: 64 channels
 - Blocks: 23 RRDB blocks
 
+Additionally, it uses a custom underwater enhancement model for color correction:
+- Architecture: U-Net
+- Features: 32 channels
+- Layers: 5
+
 ## Performance
 
 - Supports images up to 16MB
@@ -108,7 +123,7 @@ The application uses the RealESRGAN model for image enhancement:
 
 - Python 3.7+
 - CUDA-compatible GPU (optional, for faster processing)
-- Basic understanding of Flask and PyTorch
+- Basic understanding of Flask, PyTorch, and TensorFlow
 
 ### Local Development
 

@@ -1,35 +1,341 @@
-{% extends 'layout.html' %}
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #00ccff;
+            --background-color: #001e3c;
+            --text-color: #ffffff;
+        }
 
-{% block body %}
-<section class="banner_w3lspvt" id="home">
-    <div class="csslider infinity" id="slider1">
-        <div class="banner-top">
-            <div class="overlay">
-                <div class="container">
-                    <div class="w3layouts-banner-info text-center">
-                        <h3 class="text-wh">Underwater Image Enhancement Using Deep Learning</h3>
-                        <h4 class="text-wh mx-auto my-4"><b>Transform Your Underwater Images</b></h4>
-                    </div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            padding-bottom: 120px; /* Add space for footer */
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 0 0 2rem 2rem;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .upload-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--secondary-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .image-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: var(--secondary-color);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .back-button {
+                display: none;
+            }
+        }
+
+        /* Add this to your existing styles */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .button {
+            flex: 1;
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+    <header>
+        <h1><i class="fas fa-water"></i> Underwater Image Enhancer</h1>
+        <p>Transform your underwater photos with AI-powered enhancement</p>
+    </header>
+
+    <div class="container">
+        <form id="enhanceForm" method="POST" enctype="multipart/form-data">
+            <div class="upload-container">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drop your image here</h3>
+                    <p>or click to browse</p>
+                    <input type="file" id="fileInput" name="image" accept="image/*">
+                </div>
+                <div class="button-group">
+                    <button type="button" onclick="submitForm('enhance')" class="button">
+                        <i class="fas fa-magic"></i> RealESRGAN Enhancement
+                    </button>
+                    <button type="button" onclick="submitForm('enhance-combined')" class="button">
+                        <i class="fas fa-wand-magic-sparkles"></i> Combined Enhancement
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </form>
 
-<section class="blog py-5">
-    <div class="container py-md-5">
-        <h3 class="heading mb-sm-5 mb-4 text-center">Our Services</h3>
-        <div class="row blog-grids">
-            <div class="col-lg-4 col-md-6 blog-right mt-lg-0 mt-5 pt-lg-0 pt-md-5">
-                <img src="{{ url_for('static', filename='images/u2.jpeg') }}" class="img-fluid" alt="">
-                <a href="{{ url_for('enhance_image') }}">
-                    <div class="blog-info">
-                        <h4>Underwater Image Enhancement</h4>
-                        <p class="mt-2">Enhance your underwater photographs with our AI technology.</p>
-                    </div>
-                </a>
+        <div class="loading">
+            <i class="fas fa-spinner"></i>
+            <p>Enhancing your image...</p>
+        </div>
+
+        <div class="results">
+            <div class="image-container" id="originalContainer" style="display: none;">
+                <h3>Original Image</h3>
+                <img id="originalImage" src="" alt="Original Image">
+            </div>
+            <div class="image-container" id="enhancedContainer" style="display: none;">
+                <h3>Enhanced Image</h3>
+                <img id="enhancedImage" src="" alt="Enhanced Image">
             </div>
         </div>
     </div>
-</section>
-{% endblock %}
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const enhanceBtn = document.getElementById('enhanceBtn');
+        const originalContainer = document.getElementById('originalContainer');
+        const enhancedContainer = document.getElementById('enhancedContainer');
+        const originalImage = document.getElementById('originalImage');
+        const enhancedImage = document.getElementById('enhancedImage');
+        const loading = document.querySelector('.loading');
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                originalImage.src = URL.createObjectURL(file);
+                originalContainer.style.display = 'block';
+                enhanceBtn.disabled = false;
+            }
+        });
+
+        // Drag and drop functionality
+        const uploadArea = document.querySelector('.upload-area');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            uploadArea.classList.add('highlight');
+        }
+
+        function unhighlight(e) {
+            uploadArea.classList.remove('highlight');
+        }
+
+        uploadArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            fileInput.files = files;
+            if (files.length > 0) {
+                originalImage.src = URL.createObjectURL(files[0]);
+                originalContainer.style.display = 'block';
+                enhanceBtn.disabled = false;
+            }
+        }
+
+        // Add this to your existing JavaScript
+        async function submitForm(endpoint) {
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files.length) {
+                alert('Please select an image first');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+
+            const loading = document.querySelector('.loading');
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch(`/${endpoint}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('text/html')) {
+                        document.open();
+                        document.write(await response.text());
+                        document.close();
+                    } else {
+                        window.location.href = response.url;
+                    }
+                } else {
+                    alert('Enhancement failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+
+    <footer style="background: rgba(0, 0, 0, 0.5); padding: 1rem; text-align: center; width: 100%; border-top: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); position: fixed; bottom: 0; z-index: 1000;">
+        <p style="font-size: 1.1rem; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.9);">Created by Bhavana G and Bhavana Kabbur</p>
+        <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">Underwater Image Processing Project &copy; 2024</p>
+    </footer>
+</body>
+</html>
