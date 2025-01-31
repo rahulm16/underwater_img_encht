@@ -8,6 +8,9 @@ from model_enhance import enhance_model
 
 app = Flask(__name__)
 
+# Ensure upload directory exists
+os.makedirs('static/upload&result', exist_ok=True)
+
 # render home page
 @app.route('/')
 def home():
