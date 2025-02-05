@@ -21,6 +21,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 class RealESRGANEnhancer:
     def __init__(self, model_name='RealESRGAN_x4plus'):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        print("device: ", self.device)
         self.model = None
         self.model_name = model_name
         self.initialize_model()
@@ -176,6 +177,38 @@ def enhance_combined():
             else:
                 return 'Enhancement failed', 500
                 
+        except Exception as e:
+            print(f"Error during enhancement: {str(e)}")
+            return 'Enhancement failed', 500
+
+@app.route('/enhance-model', methods=['POST'])
+def enhance_model():
+    if 'image' not in request.files:
+        return 'No file uploaded', 400
+    
+    file = request.files['image']
+    if file.filename == '':
+        return 'No file selected', 400
+    
+    if file:
+        filename = secure_filename(file.filename)
+        input_path = os.path.join(app.config['UPLOAD_FOLDER'], 'input_' + filename)
+        output_path = os.path.join(app.config['UPLOAD_FOLDER'], 'model_' + filename)
+        
+        # Save input image
+        file.save(input_path)
+        
+        try:
+            # Enhance using underwater model
+            from model_enhance import enhance_model
+            intermediate_path = enhance_model(input_path)
+            
+            # Move the enhanced image to the correct output path
+            os.rename(intermediate_path, output_path)
+            
+            return render_template('results.html',
+                                   original_image='/static/uploads/input_' + filename,
+                                   enhanced_image='/static/uploads/model_' + filename)
         except Exception as e:
             print(f"Error during enhancement: {str(e)}")
             return 'Enhancement failed', 500
